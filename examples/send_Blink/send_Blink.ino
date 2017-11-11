@@ -1,12 +1,12 @@
 // demo: CAN-BUS Shield, send data
-// loovee@seeed.cc
-
 #include <mcp_can.h>
 #include <SPI.h>
 
 // the cs pin of the version after v1.1 is default to D9
 // v0.9b and v1.0 is default D10
 const int SPI_CS_PIN = 9;
+const int ledHIGH    = 1;
+const int ledLOW     = 0;
 
 MCP_CAN CAN(SPI_CS_PIN);                                    // Set CS pin
 
@@ -23,25 +23,15 @@ void setup()
     Serial.println("CAN BUS Shield init ok!");
 }
 
-unsigned char stmp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+unsigned char stmp[8] = {ledHIGH, 1, 2, 3, ledLOW, 5, 6, 7};
+
 void loop()
-{
-    // send data:  id = 0x00, standrad frame, data len = 8, stmp: data buf
-    stmp[7] = stmp[7]+1;
-    if(stmp[7] == 100)
-    {
-        stmp[7] = 0;
-        stmp[6] = stmp[6] + 1;
-        
-        if(stmp[6] == 100)
-        {
-            stmp[6] = 0;
-            stmp[5] = stmp[6] + 1;
-        }
-    }
-    
-    CAN.sendMsgBuf(0x00, 0, 8, stmp);
-    delay(100);                       // send data per 100ms
+{   Serial.println("In loop");
+    // send data:  id = 0x00, standard frame, data len = 8, stmp: data buf
+    CAN.sendMsgBuf(0x70,0, 8, stmp);
+    delay(1000);                       // send data once per second
 }
 
-// END FILE
+/*********************************************************************************************************
+  END FILE
+*********************************************************************************************************/
