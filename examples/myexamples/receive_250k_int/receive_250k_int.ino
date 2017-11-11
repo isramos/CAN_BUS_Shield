@@ -1,7 +1,12 @@
+/*
+
+    Author: Igor Ramos
+
+Original:
 // demo: CAN-BUS Shield, receive data with interrupt mode
 // when in interrupt mode, the data coming can't be too fast, must >20ms, or else you can use check mode
 // loovee, 2014-6-13
-
+*/
 #include <SPI.h>
 #include "mcp_can.h"
 
@@ -30,7 +35,7 @@ START_INIT:
         delay(100);
         goto START_INIT;
     }
-    
+
     attachInterrupt(0, MCP2515_ISR, FALLING); // start interrupt
 }
 
@@ -42,9 +47,9 @@ void MCP2515_ISR()
 void loop()
 {
   if(Flag_Recv) {                   // check if get data
-    
+
     Flag_Recv = 0;                // clear flag
-    
+
     // iterate over all pending messages
     // If either the bus is saturated or the MCU is busy,
     // both RX buffers may be in use and reading a single
@@ -52,17 +57,17 @@ void loop()
     while (CAN_MSGAVAIL == CAN.checkReceive()) {
       INT32U CanID = CAN.getCanId();  // read CAN ID
       CAN.readMsgBuf(&len, buf);      // read data,  len: data length, buf: data buf
-      
+
         Serial.print(millis());
         Serial.print(" ID: 0x");
         Serial.print(CanID, HEX);
         Serial.print("\t");
-       
+
       for(int i = 0; i<len; i++) {       // print the data
 	Serial.print(buf[i]);Serial.print("\t");
       }
       Serial.println();
-    } 
+    }
   }
 }
 

@@ -1,6 +1,9 @@
-// demo: CAN-BUS Shield, receive data with check mode
-// for each message show time stamp in ms, CAN ID, and message content
-// Igor Ramos Dec-1-2014
+/*
+   demo: CAN-BUS Shield, receive data with check mode
+   for each message show time stamp in ms, CAN ID, and message content
+
+    Author: Igor Ramos Dec-1-2014
+*/
 
 
 #include <SPI.h>
@@ -42,7 +45,7 @@ void loop()
         INT32U CanID = CAN.getCanId();  // read CAN ID
 
 	CAN.readMsgBuf(&len, buf);    // read data,  len: data length, buf: data buf
-        
+
         Serial.print(millis());
         Serial.print(" ID: 0x");
         Serial.print(CanID, HEX);
